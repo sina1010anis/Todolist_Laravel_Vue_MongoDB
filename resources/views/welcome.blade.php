@@ -6,6 +6,7 @@
 
         <title>Laravel</title>
         <link rel="stylesheet" href="{{mix('css/app.css')}}" />
+        <link rel="stylesheet" href="{{mix('css/my-style.css')}}" />
         <script src="{{mix('js/app.js')}}" defer></script>
     </head>
     <body>

@@ -11,7 +11,7 @@ class Controller extends BaseController
     public function index()
     {
         return view('index.index-page');
-        return UserMongo::first();
+        //return UserMongo::all();
 
     }
 }

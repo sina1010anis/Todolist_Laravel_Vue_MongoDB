@@ -337,3 +337,28 @@
     margin: 15px 0px;
     z-index: 1;
   }
+.icon-open-task{
+    background-color: #ffffff;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    box-shadow: 1px 1px 5px rgba(rgb(0rgb(0, 0, 0)0), rgb(0, 0, 0), rgb(0, 0, 0), 0.5);
+}
+.category-task::after{
+    content: 'X';
+    position: absolute;
+    color: #fff;
+    right: 0;
+    top: 0;
+    height: 100%;
+    cursor: pointer;
+    width:0;
+    transition: 0.2s;
+    background-color: rgb(255, 103, 118);
+}
+.category-task:hover::after{
+    width: 20px;
+}
+.list-sub-task{
+    display: none;
+}
