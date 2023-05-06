@@ -17662,19 +17662,79 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/lib/axios.js");
+
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'indexPageVue',
   data: function data() {
     return {
-      text: 'HI Vue!'
+      text: null,
+      text_sub: null,
+      tasks_data: null,
+      data_sub_task: null,
+      text_message: null
     };
   },
   mounted: function mounted() {},
   methods: {
-    show_sub_task: function show_sub_task() {
-      jquery__WEBPACK_IMPORTED_MODULE_0___default()('.list-sub-task').stop().slideToggle();
+    show_message_server: function show_message_server() {
+      var text = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'تسک جدید وارد شد.';
+      var class_css = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'message-for-server';
+      var time_out = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 3500;
+      var pos = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {
+        bottom: '5px'
+      };
+      var pos_back = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : {
+        bottom: '-100px'
+      };
+      this.text_message = text;
+      jquery__WEBPACK_IMPORTED_MODULE_0___default()('.' + class_css).animate(pos);
+      setTimeout(function () {
+        jquery__WEBPACK_IMPORTED_MODULE_0___default()('.' + class_css).animate(pos_back);
+      }, time_out);
+    },
+    new_sub_task: function new_sub_task(id) {
+      var _this = this;
+      axios__WEBPACK_IMPORTED_MODULE_1__["default"].post('new/sub/tasks', {
+        id: id,
+        title: this.text_sub
+      }).then(function (res) {
+        _this.show_message_server('زیر تسک جدید وارد شد');
+        _this.text_sub = null;
+        _this.data_sub_task = res.data;
+      });
+    },
+    show_sub_task: function show_sub_task(id) {
+      var _this2 = this;
+      axios__WEBPACK_IMPORTED_MODULE_1__["default"].post('get/sub/tasks', {
+        id: id
+      }).then(function (res) {
+        _this2.data_sub_task = res.data;
+        jquery__WEBPACK_IMPORTED_MODULE_0___default()('.list-sub-task').stop().slideUp();
+        jquery__WEBPACK_IMPORTED_MODULE_0___default()('#' + id).stop().slideToggle();
+        _this2.text_sub = null;
+      })["catch"](function () {
+        console.error('Error : DDd325');
+      });
+    },
+    new_task: function new_task() {
+      var _this3 = this;
+      axios__WEBPACK_IMPORTED_MODULE_1__["default"].post('new/task', {
+        title: this.text
+      }).then(function (res) {
+        _this3.show_message_server(' تسک جدید وارد شد');
+        axios__WEBPACK_IMPORTED_MODULE_1__["default"].post('get/tasks').then(function (resp) {
+          _this3.text = null;
+          _this3.tasks_data = resp.data;
+        });
+      })["catch"](function () {
+        console.error('Error : EEe454');
+      });
     }
+  },
+  props: {
+    tasks: Object
   }
 });
 
@@ -17699,30 +17759,173 @@ var _hoisted_1 = {
 var _hoisted_2 = {
   "class": "row"
 };
-var _hoisted_3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"col-12\"><h2 class=\"my-font-IYM my-color-b-600 my-3\"> لیست کار های روزمره </h2><p class=\"my-font-IYL my-f-13 mb-0 pb-0 select-none\" dir=\"rtl\"><i class=\"bi bi-arrow-bar-left my-f-22 my-color-b-600 my-pos-rel ms-2\" style=\"top:4px;\"></i>با دکمه <span style=\"color:rgb(0, 142, 0);\">&quot;ثبت&quot;</span> یا کلید <span style=\"color:rgb(0, 142, 0);\">&quot;Enter&quot;</span> میتواند یک تسک جدید وارد کنید.</p><p class=\"my-font-IYL my-f-13 mb-0 pb-0 select-none\" dir=\"rtl\"><i class=\"bi bi-arrow-bar-left my-f-22 my-color-b-600 my-pos-rel ms-2\" style=\"top:4px;\"></i>با علامت <span style=\"color:rgb(73, 73, 255);\">&quot;<i class=\"bi bi-chevron-down\"></i>&quot;</span> میتواند زیر مجوعه های تسک خود راببیند و حذف یا اضافه کنید</p><p class=\"my-font-IYL my-f-13 mb-0 pb-0 select-none\" dir=\"rtl\"><i class=\"bi bi-arrow-bar-left my-f-22 my-color-b-600 my-pos-rel ms-2\" style=\"top:4px;\"></i> با کلیک روی زیر تسک ها میتواند ان ها را از لیست زیر تسک ها حذف کنید</p><p class=\"my-font-IYL my-f-13 mt-0 pt-0 select-none\" dir=\"rtl\"><i class=\"bi bi-arrow-bar-left my-f-22 my-color-b-600 my-pos-rel ms-2\" style=\"top:4px;\"></i>با علامت <span style=\"color:rgb(255, 76, 76);\">&quot;X&quot;</span> میتواند تسک مورد نظر را حذف کند.</p><div class=\"input-group mb-3 mt-5 my-w-75-i\"><button class=\"btn btn-outline-secondary my-font-IYL my-f-18-i px-4\" type=\"button\" id=\"button-addon1\">ثبت</button><input dir=\"rtl\" type=\"text\" class=\"form-control my-f-12-i border-1 border-secondary my-w-50 my-font-IYM\" placeholder=\"یک تسک جدید وارد کنید...!\" aria-label=\"Example text with button addon\" aria-describedby=\"button-addon1\"></div></div>", 1);
-var _hoisted_4 = {
+var _hoisted_3 = {
+  "class": "col-12"
+};
+var _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<h2 class=\"my-font-IYM my-color-b-600 my-3\"> لیست کار های روزمره </h2><p class=\"my-font-IYL my-f-13 mb-0 pb-0 select-none\" dir=\"rtl\"><i class=\"bi bi-arrow-bar-left my-f-22 my-color-b-600 my-pos-rel ms-2\" style=\"top:4px;\"></i>با دکمه <span style=\"color:rgb(0, 142, 0);\">&quot;ثبت&quot;</span> یا کلید <span style=\"color:rgb(0, 142, 0);\">&quot;Enter&quot;</span> میتواند یک تسک جدید وارد کنید.</p><p class=\"my-font-IYL my-f-13 mb-0 pb-0 select-none\" dir=\"rtl\"><i class=\"bi bi-arrow-bar-left my-f-22 my-color-b-600 my-pos-rel ms-2\" style=\"top:4px;\"></i>با علامت <span style=\"color:rgb(73, 73, 255);\">&quot;<i class=\"bi bi-chevron-down\"></i>&quot;</span> میتواند زیر مجوعه های تسک خود راببیند و حذف یا اضافه کنید</p><p class=\"my-font-IYL my-f-13 mb-0 pb-0 select-none\" dir=\"rtl\"><i class=\"bi bi-arrow-bar-left my-f-22 my-color-b-600 my-pos-rel ms-2\" style=\"top:4px;\"></i> با کلیک روی زیر تسک ها میتواند ان ها را از لیست زیر تسک ها حذف کنید</p><p class=\"my-font-IYL my-f-13 mt-0 pt-0 select-none\" dir=\"rtl\"><i class=\"bi bi-arrow-bar-left my-f-22 my-color-b-600 my-pos-rel ms-2\" style=\"top:4px;\"></i>با علامت <span style=\"color:rgb(255, 76, 76);\">&quot;X&quot;</span> میتواند تسک مورد نظر را حذف کند.</p>", 5);
+var _hoisted_9 = {
+  "class": "input-group mb-3 mt-5 my-w-75-i"
+};
+var _hoisted_10 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  "class": "my-w-75"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  "class": "btn btn-danger btn-sm float-end"
+}, "حذف همه تسک ها")], -1 /* HOISTED */);
+var _hoisted_11 = {
   "class": "col-12 mt-4"
 };
-var _hoisted_5 = {
-  "class": "task"
-};
-var _hoisted_6 = {
+var _hoisted_12 = ["onKey"];
+var _hoisted_13 = {
   "class": "p-2 mt-3 rounded-1 my-w-75 d-flex justify-content-between align-items-center my-pos-rel overflow-hidden category-task",
   style: {
     "border": "1px solid rgb(84, 84, 84)"
   }
 };
-var _hoisted_7 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
+var _hoisted_14 = {
   "class": "my-font-IYM my-f-13"
-}, "این یک تسک جدید است", -1 /* HOISTED */);
-var _hoisted_8 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<div class=\"mt-1 rounded-1 my-w-75 list-sub-task\" style=\"border:1px solid rgb(84, 84, 84);\"><ul><li class=\"my-f-12 py-2 my-pointer my-color-b-700 my-font-IYL\"><p>ورزش ساعت 8:50 شروع و 9:50 به اتمام برسد</p></li></ul><div class=\"input-group mb-3 mt-5 my-w-75-i\"><button class=\"btn btn-outline-secondary my-font-IYL my-f-14-i px-4\" type=\"button\" id=\"button-addon1\">ثبت</button><input dir=\"rtl\" type=\"text\" class=\"form-control my-f-12-i border-1 border-secondary my-w-50 my-font-IYM\" placeholder=\"اضافه کردن زیر تسک جدید\" aria-label=\"Example text with button addon\" aria-describedby=\"button-addon1\"></div></div>", 1);
+};
+var _hoisted_15 = ["onClick"];
+var _hoisted_16 = ["id"];
+var _hoisted_17 = ["onKey"];
+var _hoisted_18 = {
+  "class": "input-group mb-3 mt-5 my-w-75-i"
+};
+var _hoisted_19 = ["onClick"];
+var _hoisted_20 = ["onKeyup"];
+var _hoisted_21 = ["onKey"];
+var _hoisted_22 = {
+  "class": "p-2 mt-3 rounded-1 my-w-75 d-flex justify-content-between align-items-center my-pos-rel overflow-hidden category-task",
+  style: {
+    "border": "1px solid rgb(84, 84, 84)"
+  }
+};
+var _hoisted_23 = {
+  "class": "my-font-IYM my-f-13"
+};
+var _hoisted_24 = ["onClick"];
+var _hoisted_25 = ["id"];
+var _hoisted_26 = ["onKey"];
+var _hoisted_27 = {
+  "class": "input-group mb-3 mt-5 my-w-75-i"
+};
+var _hoisted_28 = ["onClick"];
+var _hoisted_29 = ["onKeyup"];
+var _hoisted_30 = {
+  dir: "rtl",
+  "class": "message-ok-for-server message-for-server my-w-50 p-3 my-font-IYM my-f-12"
+};
+var _hoisted_31 = {
+  dir: "rtl",
+  "class": "message-error-for-server message-for-server my-w-50 p-3 my-font-IYM my-f-12"
+};
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [_hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [_hoisted_7, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
-    "class": "bi bi-chevron-down my-f-18 my-pointer icon-open-task",
-    onClick: _cache[0] || (_cache[0] = function ($event) {
-      return $options.show_sub_task();
-    })
-  })]), _hoisted_8])])])]);
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [_hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    onClick: _cache[0] || (_cache[0] = function () {
+      return $options.new_task && $options.new_task.apply($options, arguments);
+    }),
+    "class": "btn btn-outline-secondary my-font-IYL my-f-18-i px-4",
+    type: "button",
+    id: "button-addon1"
+  }, "ثبت"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    onKeyup: _cache[1] || (_cache[1] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withKeys)(function () {
+      return $options.new_task && $options.new_task.apply($options, arguments);
+    }, ["enter"])),
+    "onUpdate:modelValue": _cache[2] || (_cache[2] = function ($event) {
+      return _ctx.text = $event;
+    }),
+    dir: "rtl",
+    type: "text",
+    "class": "form-control my-f-12-i border-1 border-secondary my-w-50 my-font-IYM",
+    placeholder: "یک تسک جدید وارد کنید...!",
+    "aria-label": "Example text with button addon",
+    "aria-describedby": "button-addon1"
+  }, null, 544 /* HYDRATE_EVENTS, NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, _ctx.text]])]), _hoisted_10]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [_ctx.tasks_data == null ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+    key: 0
+  }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.tasks, function (task, index) {
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
+      "class": "task",
+      onKey: index
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_13, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_14, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(task.title), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+      "class": "bi bi-chevron-down my-f-18 my-pointer icon-open-task",
+      onClick: function onClick($event) {
+        return $options.show_sub_task(task._id);
+      }
+    }, null, 8 /* PROPS */, _hoisted_15)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+      "class": "mt-1 rounded-1 my-w-75 list-sub-task",
+      id: task._id,
+      style: {
+        "border": "1px solid rgb(84, 84, 84)"
+      }
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("ul", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(_ctx.data_sub_task, function (sub_task, index) {
+      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("li", {
+        onKey: index,
+        "class": "my-f-12 py-2 my-pointer my-color-b-700 my-font-IYL"
+      }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(sub_task.title), 1 /* TEXT */)], 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_17);
+    }), 256 /* UNKEYED_FRAGMENT */))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_18, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+      onClick: function onClick($event) {
+        return $options.new_sub_task(task._id);
+      },
+      "class": "btn btn-outline-secondary my-font-IYL my-f-14-i px-4",
+      type: "button",
+      id: "button-addon1"
+    }, "ثبت", 8 /* PROPS */, _hoisted_19), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+      "onUpdate:modelValue": _cache[3] || (_cache[3] = function ($event) {
+        return _ctx.text_sub = $event;
+      }),
+      onKeyup: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withKeys)(function ($event) {
+        return $options.new_sub_task(task._id);
+      }, ["enter"]),
+      dir: "rtl",
+      type: "text",
+      "class": "form-control my-f-12-i border-1 border-secondary my-w-50 my-font-IYM",
+      placeholder: "اضافه کردن زیر تسک جدید",
+      "aria-label": "Example text with button addon",
+      "aria-describedby": "button-addon1"
+    }, null, 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_20), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, _ctx.text_sub]])])], 8 /* PROPS */, _hoisted_16)], 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_12);
+  }), 256 /* UNKEYED_FRAGMENT */)) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+    key: 1
+  }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(_ctx.tasks_data, function (task, index) {
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
+      "class": "task",
+      onKey: index
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_22, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_23, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(task.title), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+      "class": "bi bi-chevron-down my-f-18 my-pointer icon-open-task",
+      onClick: function onClick($event) {
+        return $options.show_sub_task(task._id);
+      }
+    }, null, 8 /* PROPS */, _hoisted_24)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+      "class": "mt-1 rounded-1 my-w-75 list-sub-task",
+      id: task._id,
+      style: {
+        "border": "1px solid rgb(84, 84, 84)"
+      }
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("ul", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(_ctx.data_sub_task, function (sub_task, index) {
+      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("li", {
+        onKey: index,
+        "class": "my-f-12 py-2 my-pointer my-color-b-700 my-font-IYL"
+      }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(sub_task.title), 1 /* TEXT */)], 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_26);
+    }), 256 /* UNKEYED_FRAGMENT */))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_27, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+      onClick: function onClick($event) {
+        return $options.new_sub_task(task._id);
+      },
+      "class": "btn btn-outline-secondary my-font-IYL my-f-14-i px-4",
+      type: "button",
+      id: "button-addon1"
+    }, "ثبت", 8 /* PROPS */, _hoisted_28), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+      "onUpdate:modelValue": _cache[4] || (_cache[4] = function ($event) {
+        return _ctx.text_sub = $event;
+      }),
+      onKeyup: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withKeys)(function ($event) {
+        return $options.new_sub_task(task._id);
+      }, ["enter"]),
+      dir: "rtl",
+      type: "text",
+      "class": "form-control my-f-12-i border-1 border-secondary my-w-50 my-font-IYM",
+      placeholder: "اضافه کردن زیر تسک جدید",
+      "aria-label": "Example text with button addon",
+      "aria-describedby": "button-addon1"
+    }, null, 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_29), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, _ctx.text_sub]])])], 8 /* PROPS */, _hoisted_25)], 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_21);
+  }), 256 /* UNKEYED_FRAGMENT */))])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_30, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.text_message), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_31, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.text_message), 1 /* TEXT */)], 64 /* STABLE_FRAGMENT */);
 }
 
 /***/ }),

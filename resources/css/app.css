@@ -362,3 +362,22 @@
 .list-sub-task{
     display: none;
 }
+
+.message-for-server{
+    position: fixed;
+    border-radius: 5px;
+    bottom: -100px;
+    left: 50%;
+    transform: translate(-50%,-50%);
+
+}
+.message-ok-for-server{
+    background-color: #d1e7dd;
+    border: 1px solid rgb(0, 128, 0);
+    color: rgb(0, 125, 0);
+}
+.message-error-for-server{
+    background-color: #f8d7da;
+    border: 1px solid rgb(172, 0, 0);
+    color: rgb(172, 0, 0);
+}

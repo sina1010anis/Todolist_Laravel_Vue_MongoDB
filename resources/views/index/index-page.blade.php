@@ -1,5 +1,5 @@
 @extends('welcome')
 
 @section('index')
-    <index-page-vue />
+    <index-page-vue :tasks="{{$tasks}}"/>
 @endsection
