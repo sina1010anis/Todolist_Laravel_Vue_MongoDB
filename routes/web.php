@@ -21,3 +21,4 @@ Route::post('new/task' , [TaskController::class , 'create'])->name('create_task'
 Route::post('get/tasks' , [TaskController::class , 'get'])->name('get_tasks');
 Route::post('get/sub/tasks' , [SubTasks::class , 'get'])->name('get_sub_tasks');
 Route::post('new/sub/tasks' , [SubTasks::class , 'create'])->name('create_sub_tasks');
+Route::post('delete/task/{mode}' , [TaskController::class , 'delete'])->name('delete_task');

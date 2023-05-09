@@ -2,25 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\MongoDB\SubTask;
+use Response;
+use Illuminate\Support\Str;
 use App\Models\MongoDB\Task;
 use Illuminate\Http\Request;
-use App\MyClass\CookieEesy as ClassCookie;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Str;
-use Response;
+use App\MyClass\CookieEesy as ClassCookie;
 
 class TaskController extends Controller
 {
     public function create(Request $request , ClassCookie $classCookie)
     {
-        $uniq_code = $classCookie->check()->set(Str::password(10) , 9999)->get();
         $request->validate(['title'=>'required|min:5|max:105']);
         if($request->ajax())
         {
             Task::create([
                 'title'=>$request->title,
                 'stauts'=>false,
-                'uniq_code'=>$uniq_code
+                'uniq_code'=>$classCookie->CSG(Str::password(10) , 9999)
             ]);
             return response()->json('OK' , 200);
         }
@@ -28,7 +28,27 @@ class TaskController extends Controller
 
     public function get(ClassCookie $classCookie)
     {
-        $uniq_code = $classCookie->check()->set(Str::password(10) , 9999)->get();
-        return Task::whereUniq_code($uniq_code)->latest('created_at')->get();
+        return Task::whereUniq_code($classCookie->CSG(Str::password(10) , 9999))->latest('created_at')->get();
+    }
+
+    public function delete($mode , Request $request , ClassCookie $classCookie){
+        if($request->ajax()){
+            switch($mode){
+                case 'all':
+                    Task::where('uniq_code' , $classCookie->CSG(Str::password(10) , 9999))->delete();
+                    break;
+                case 'task':
+                    Task::where(['uniq_code' => $classCookie->CSG(Str::password(10) , 9999) , '_id' => $request->id])->delete();
+                    break;
+                case 'sub_task':
+                    $count_task = Task::where(['uniq_code' => $classCookie->CSG(Str::password(10) , 9999) , '_id' => $request->id])->count();
+                    ($count_task == 1) ? SubTask::where(['_id' => $request->id_sub])->delete():'Error : FFf987';
+                    break;
+                case 'all_sub_task':
+                    $count_task = Task::where(['uniq_code' => $classCookie->CSG(Str::password(10) , 9999) , '_id' => $request->id])->count();
+                    ($count_task == 1) ? SubTask::where('task_id' , $request->id)->delete():'Error : FFf987';
+                    break;
+            }
+        }
     }
 }

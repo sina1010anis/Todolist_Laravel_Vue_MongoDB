@@ -14,41 +14,43 @@
                     <input @keyup.enter="new_task" v-model="text" dir="rtl" type="text" class="form-control my-f-12-i border-1 border-secondary my-w-50 my-font-IYM" placeholder="یک تسک جدید وارد کنید...!" aria-label="Example text with button addon" aria-describedby="button-addon1">
                 </div>
                 <div class="my-w-75">
-                    <button class="btn btn-danger btn-sm float-end">حذف همه تسک ها</button>
+                    <button class="btn btn-danger btn-sm float-end" @click="delete_task('all')">حذف همه تسک ها</button>
                 </div>
             </div>
             <div class="col-12 mt-4">
                 <div class="task" v-if="tasks_data == null" v-for="(task , index) in tasks" @key="index">
                     <div class="p-2 mt-3 rounded-1 my-w-75 d-flex justify-content-between align-items-center my-pos-rel overflow-hidden category-task" style="border: 1px solid rgb(84, 84, 84);" >
-                        <p class="my-font-IYM my-f-13">{{ task.title }}</p>
+                        <p class="my-font-IYM my-f-13 my-pointer" @click="delete_task('task' , task._id)">{{ task.title }}</p>
                         <i class="bi bi-chevron-down my-f-18 my-pointer icon-open-task" @click="show_sub_task(task._id)"></i>
                     </div>
                     <div class=" mt-1 rounded-1 my-w-75 list-sub-task" :id="task._id" style="border: 1px solid rgb(84, 84, 84);">
                         <ul>
                             <li v-for="(sub_task , index) in data_sub_task" @key="index" class="my-f-12 py-2 my-pointer my-color-b-700 my-font-IYL">
-                                <p>{{ sub_task.title }}</p>
+                                <p @click="delete_task('sub_task' ,task._id , sub_task._id)">{{ sub_task.title }}</p>
                             </li>
                         </ul>
                         <div  class="input-group mb-3 mt-5 my-w-75-i">
                             <button  @click="new_sub_task(task._id)" class="btn btn-outline-secondary my-font-IYL my-f-14-i px-4" type="button" id="button-addon1">ثبت</button>
                             <input v-model="text_sub" @keyup.enter="new_sub_task(task._id)" dir="rtl" type="text" class="form-control my-f-12-i border-1 border-secondary my-w-50 my-font-IYM" placeholder="اضافه کردن زیر تسک جدید" aria-label="Example text with button addon" aria-describedby="button-addon1">
+                            <button class="btn btn-danger btn-sm float-end" @click="delete_task('all_sub_task', task._id)">حذف همه زیر تسک ها</button>
                         </div>
                     </div>
                 </div>
                 <div class="task" v-else v-for="(task , index) in tasks_data" @key="index">
                     <div class="p-2 mt-3 rounded-1 my-w-75 d-flex justify-content-between align-items-center my-pos-rel overflow-hidden category-task" style="border: 1px solid rgb(84, 84, 84);" >
-                        <p class="my-font-IYM my-f-13">{{ task.title }}</p>
+                        <p class="my-font-IYM my-f-13 my-pointer" @click="delete_task('task' , task._id)">{{ task.title }}</p>
                         <i class="bi bi-chevron-down my-f-18 my-pointer icon-open-task" @click="show_sub_task(task._id)"></i>
                     </div>
                     <div class=" mt-1 rounded-1 my-w-75 list-sub-task" :id="task._id" style="border: 1px solid rgb(84, 84, 84);">
                         <ul>
                             <li v-for="(sub_task , index) in data_sub_task" @key="index" class="my-f-12 py-2 my-pointer my-color-b-700 my-font-IYL">
-                                <p>{{ sub_task.title}}</p>
+                                <p @click="delete_task('sub_task' , task._id , sub_task._id)">{{ sub_task.title}}</p>
                             </li>
                         </ul>
                         <div  class="input-group mb-3 mt-5 my-w-75-i">
                             <button  @click="new_sub_task(task._id)" class="btn btn-outline-secondary my-font-IYL my-f-14-i px-4" type="button" id="button-addon1">ثبت</button>
                             <input v-model="text_sub" @keyup.enter="new_sub_task(task._id)" dir="rtl" type="text" class="form-control my-f-12-i border-1 border-secondary my-w-50 my-font-IYM" placeholder="اضافه کردن زیر تسک جدید" aria-label="Example text with button addon" aria-describedby="button-addon1">
+                            <button class="btn btn-danger btn-sm float-end" @click="delete_task('all_sub_task' , task._id )">حذف همه زیر تسک ها</button>
                         </div>
                     </div>
                 </div>
@@ -78,7 +80,16 @@ export default {
     }),mounted(){
 
     },methods:{
-        show_message_server(text = 'تسک جدید وارد شد.' , class_css = 'message-for-server' , time_out = 3500 , pos = {bottom:'5px'} , pos_back = {bottom:'-100px'}){
+        delete_task(mode , id_task = null , id_sub = null){
+            axios.post('delete/task/'+mode , {id:id_task , id_sub:id_sub}).then((res)=>{
+                    this.show_message_server(' عملیات حذف با موفقیت انجام شد' , 'message-error-for-server' );
+                    axios.post('get/tasks').then((resp)=>{
+                        this.text = null
+                        this.tasks_data = resp.data
+                    })
+                })
+        },
+        show_message_server(text = 'تسک جدید وارد شد.' , class_css = 'message-ok-for-server' , time_out = 3500 , pos = {bottom:'5px'} , pos_back = {bottom:'-100px'}){
             this.text_message = text
             $('.'+class_css).animate(pos);
             setTimeout(()=>{
@@ -99,7 +110,7 @@ export default {
                     $('#'+id).stop().slideToggle()
                     this.text_sub=null
                 }).catch(()=>{
-                console.error('Error : DDd325');
+                    this.show_message_server('خطایی رخ داده' , 'message-error-for-server');
             })
         },
         new_task()
@@ -111,7 +122,7 @@ export default {
                     this.tasks_data = resp.data
                 })
             }).catch(()=>{
-                console.error('Error : EEe454');
+                this.show_message_server('خطایی رخ داده' , 'message-error-for-server');
             })
         }
     },

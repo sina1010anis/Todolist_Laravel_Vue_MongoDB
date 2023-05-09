@@ -29,5 +29,10 @@ class CookieEesy{
 
         return $this->cookie;
     }
+
+    public function CSG($val , $time)
+    {
+        return $this->check()->set($val , $time)->get();
+    }
 }
 ?>

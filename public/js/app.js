@@ -17678,9 +17678,24 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {},
   methods: {
+    delete_task: function delete_task(mode) {
+      var _this = this;
+      var id_task = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+      var id_sub = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+      axios__WEBPACK_IMPORTED_MODULE_1__["default"].post('delete/task/' + mode, {
+        id: id_task,
+        id_sub: id_sub
+      }).then(function (res) {
+        _this.show_message_server(' عملیات حذف با موفقیت انجام شد', 'message-error-for-server');
+        axios__WEBPACK_IMPORTED_MODULE_1__["default"].post('get/tasks').then(function (resp) {
+          _this.text = null;
+          _this.tasks_data = resp.data;
+        });
+      });
+    },
     show_message_server: function show_message_server() {
       var text = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'تسک جدید وارد شد.';
-      var class_css = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'message-for-server';
+      var class_css = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'message-ok-for-server';
       var time_out = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 3500;
       var pos = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {
         bottom: '5px'
@@ -17695,41 +17710,41 @@ __webpack_require__.r(__webpack_exports__);
       }, time_out);
     },
     new_sub_task: function new_sub_task(id) {
-      var _this = this;
+      var _this2 = this;
       axios__WEBPACK_IMPORTED_MODULE_1__["default"].post('new/sub/tasks', {
         id: id,
         title: this.text_sub
       }).then(function (res) {
-        _this.show_message_server('زیر تسک جدید وارد شد');
-        _this.text_sub = null;
-        _this.data_sub_task = res.data;
+        _this2.show_message_server('زیر تسک جدید وارد شد');
+        _this2.text_sub = null;
+        _this2.data_sub_task = res.data;
       });
     },
     show_sub_task: function show_sub_task(id) {
-      var _this2 = this;
+      var _this3 = this;
       axios__WEBPACK_IMPORTED_MODULE_1__["default"].post('get/sub/tasks', {
         id: id
       }).then(function (res) {
-        _this2.data_sub_task = res.data;
+        _this3.data_sub_task = res.data;
         jquery__WEBPACK_IMPORTED_MODULE_0___default()('.list-sub-task').stop().slideUp();
         jquery__WEBPACK_IMPORTED_MODULE_0___default()('#' + id).stop().slideToggle();
-        _this2.text_sub = null;
+        _this3.text_sub = null;
       })["catch"](function () {
-        console.error('Error : DDd325');
+        _this3.show_message_server('خطایی رخ داده', 'message-error-for-server');
       });
     },
     new_task: function new_task() {
-      var _this3 = this;
+      var _this4 = this;
       axios__WEBPACK_IMPORTED_MODULE_1__["default"].post('new/task', {
         title: this.text
       }).then(function (res) {
-        _this3.show_message_server(' تسک جدید وارد شد');
+        _this4.show_message_server(' تسک جدید وارد شد');
         axios__WEBPACK_IMPORTED_MODULE_1__["default"].post('get/tasks').then(function (resp) {
-          _this3.text = null;
-          _this3.tasks_data = resp.data;
+          _this4.text = null;
+          _this4.tasks_data = resp.data;
         });
       })["catch"](function () {
-        console.error('Error : EEe454');
+        _this4.show_message_server('خطایی رخ داده', 'message-error-for-server');
       });
     }
   },
@@ -17766,11 +17781,9 @@ var _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVN
 var _hoisted_9 = {
   "class": "input-group mb-3 mt-5 my-w-75-i"
 };
-var _hoisted_10 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+var _hoisted_10 = {
   "class": "my-w-75"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-  "class": "btn btn-danger btn-sm float-end"
-}, "حذف همه تسک ها")], -1 /* HOISTED */);
+};
 var _hoisted_11 = {
   "class": "col-12 mt-4"
 };
@@ -17781,40 +17794,40 @@ var _hoisted_13 = {
     "border": "1px solid rgb(84, 84, 84)"
   }
 };
-var _hoisted_14 = {
-  "class": "my-font-IYM my-f-13"
-};
+var _hoisted_14 = ["onClick"];
 var _hoisted_15 = ["onClick"];
 var _hoisted_16 = ["id"];
 var _hoisted_17 = ["onKey"];
-var _hoisted_18 = {
+var _hoisted_18 = ["onClick"];
+var _hoisted_19 = {
   "class": "input-group mb-3 mt-5 my-w-75-i"
 };
-var _hoisted_19 = ["onClick"];
-var _hoisted_20 = ["onKeyup"];
-var _hoisted_21 = ["onKey"];
-var _hoisted_22 = {
+var _hoisted_20 = ["onClick"];
+var _hoisted_21 = ["onKeyup"];
+var _hoisted_22 = ["onClick"];
+var _hoisted_23 = ["onKey"];
+var _hoisted_24 = {
   "class": "p-2 mt-3 rounded-1 my-w-75 d-flex justify-content-between align-items-center my-pos-rel overflow-hidden category-task",
   style: {
     "border": "1px solid rgb(84, 84, 84)"
   }
 };
-var _hoisted_23 = {
-  "class": "my-font-IYM my-f-13"
-};
-var _hoisted_24 = ["onClick"];
-var _hoisted_25 = ["id"];
-var _hoisted_26 = ["onKey"];
-var _hoisted_27 = {
+var _hoisted_25 = ["onClick"];
+var _hoisted_26 = ["onClick"];
+var _hoisted_27 = ["id"];
+var _hoisted_28 = ["onKey"];
+var _hoisted_29 = ["onClick"];
+var _hoisted_30 = {
   "class": "input-group mb-3 mt-5 my-w-75-i"
 };
-var _hoisted_28 = ["onClick"];
-var _hoisted_29 = ["onKeyup"];
-var _hoisted_30 = {
+var _hoisted_31 = ["onClick"];
+var _hoisted_32 = ["onKeyup"];
+var _hoisted_33 = ["onClick"];
+var _hoisted_34 = {
   dir: "rtl",
   "class": "message-ok-for-server message-for-server my-w-50 p-3 my-font-IYM my-f-12"
 };
-var _hoisted_31 = {
+var _hoisted_35 = {
   dir: "rtl",
   "class": "message-error-for-server message-for-server my-w-50 p-3 my-font-IYM my-f-12"
 };
@@ -17839,13 +17852,23 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     placeholder: "یک تسک جدید وارد کنید...!",
     "aria-label": "Example text with button addon",
     "aria-describedby": "button-addon1"
-  }, null, 544 /* HYDRATE_EVENTS, NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, _ctx.text]])]), _hoisted_10]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [_ctx.tasks_data == null ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+  }, null, 544 /* HYDRATE_EVENTS, NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, _ctx.text]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    "class": "btn btn-danger btn-sm float-end",
+    onClick: _cache[3] || (_cache[3] = function ($event) {
+      return $options.delete_task('all');
+    })
+  }, "حذف همه تسک ها")])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [_ctx.tasks_data == null ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
     key: 0
   }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.tasks, function (task, index) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
       "class": "task",
       onKey: index
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_13, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_14, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(task.title), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_13, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
+      "class": "my-font-IYM my-f-13 my-pointer",
+      onClick: function onClick($event) {
+        return $options.delete_task('task', task._id);
+      }
+    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(task.title), 9 /* TEXT, PROPS */, _hoisted_14), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
       "class": "bi bi-chevron-down my-f-18 my-pointer icon-open-task",
       onClick: function onClick($event) {
         return $options.show_sub_task(task._id);
@@ -17860,58 +17883,19 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("li", {
         onKey: index,
         "class": "my-f-12 py-2 my-pointer my-color-b-700 my-font-IYL"
-      }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(sub_task.title), 1 /* TEXT */)], 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_17);
-    }), 256 /* UNKEYED_FRAGMENT */))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_18, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+      }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
+        onClick: function onClick($event) {
+          return $options.delete_task('sub_task', task._id, sub_task._id);
+        }
+      }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(sub_task.title), 9 /* TEXT, PROPS */, _hoisted_18)], 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_17);
+    }), 256 /* UNKEYED_FRAGMENT */))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_19, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
       onClick: function onClick($event) {
         return $options.new_sub_task(task._id);
       },
       "class": "btn btn-outline-secondary my-font-IYL my-f-14-i px-4",
       type: "button",
       id: "button-addon1"
-    }, "ثبت", 8 /* PROPS */, _hoisted_19), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
-      "onUpdate:modelValue": _cache[3] || (_cache[3] = function ($event) {
-        return _ctx.text_sub = $event;
-      }),
-      onKeyup: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withKeys)(function ($event) {
-        return $options.new_sub_task(task._id);
-      }, ["enter"]),
-      dir: "rtl",
-      type: "text",
-      "class": "form-control my-f-12-i border-1 border-secondary my-w-50 my-font-IYM",
-      placeholder: "اضافه کردن زیر تسک جدید",
-      "aria-label": "Example text with button addon",
-      "aria-describedby": "button-addon1"
-    }, null, 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_20), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, _ctx.text_sub]])])], 8 /* PROPS */, _hoisted_16)], 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_12);
-  }), 256 /* UNKEYED_FRAGMENT */)) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
-    key: 1
-  }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(_ctx.tasks_data, function (task, index) {
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
-      "class": "task",
-      onKey: index
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_22, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_23, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(task.title), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
-      "class": "bi bi-chevron-down my-f-18 my-pointer icon-open-task",
-      onClick: function onClick($event) {
-        return $options.show_sub_task(task._id);
-      }
-    }, null, 8 /* PROPS */, _hoisted_24)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-      "class": "mt-1 rounded-1 my-w-75 list-sub-task",
-      id: task._id,
-      style: {
-        "border": "1px solid rgb(84, 84, 84)"
-      }
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("ul", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(_ctx.data_sub_task, function (sub_task, index) {
-      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("li", {
-        onKey: index,
-        "class": "my-f-12 py-2 my-pointer my-color-b-700 my-font-IYL"
-      }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(sub_task.title), 1 /* TEXT */)], 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_26);
-    }), 256 /* UNKEYED_FRAGMENT */))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_27, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-      onClick: function onClick($event) {
-        return $options.new_sub_task(task._id);
-      },
-      "class": "btn btn-outline-secondary my-font-IYL my-f-14-i px-4",
-      type: "button",
-      id: "button-addon1"
-    }, "ثبت", 8 /* PROPS */, _hoisted_28), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    }, "ثبت", 8 /* PROPS */, _hoisted_20), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
       "onUpdate:modelValue": _cache[4] || (_cache[4] = function ($event) {
         return _ctx.text_sub = $event;
       }),
@@ -17924,8 +17908,70 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       placeholder: "اضافه کردن زیر تسک جدید",
       "aria-label": "Example text with button addon",
       "aria-describedby": "button-addon1"
-    }, null, 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_29), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, _ctx.text_sub]])])], 8 /* PROPS */, _hoisted_25)], 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_21);
-  }), 256 /* UNKEYED_FRAGMENT */))])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_30, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.text_message), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_31, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.text_message), 1 /* TEXT */)], 64 /* STABLE_FRAGMENT */);
+    }, null, 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_21), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, _ctx.text_sub]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+      "class": "btn btn-danger btn-sm float-end",
+      onClick: function onClick($event) {
+        return $options.delete_task('all_sub_task', task._id);
+      }
+    }, "حذف همه زیر تسک ها", 8 /* PROPS */, _hoisted_22)])], 8 /* PROPS */, _hoisted_16)], 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_12);
+  }), 256 /* UNKEYED_FRAGMENT */)) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+    key: 1
+  }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(_ctx.tasks_data, function (task, index) {
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
+      "class": "task",
+      onKey: index
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_24, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
+      "class": "my-font-IYM my-f-13 my-pointer",
+      onClick: function onClick($event) {
+        return $options.delete_task('task', task._id);
+      }
+    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(task.title), 9 /* TEXT, PROPS */, _hoisted_25), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+      "class": "bi bi-chevron-down my-f-18 my-pointer icon-open-task",
+      onClick: function onClick($event) {
+        return $options.show_sub_task(task._id);
+      }
+    }, null, 8 /* PROPS */, _hoisted_26)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+      "class": "mt-1 rounded-1 my-w-75 list-sub-task",
+      id: task._id,
+      style: {
+        "border": "1px solid rgb(84, 84, 84)"
+      }
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("ul", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(_ctx.data_sub_task, function (sub_task, index) {
+      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("li", {
+        onKey: index,
+        "class": "my-f-12 py-2 my-pointer my-color-b-700 my-font-IYL"
+      }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
+        onClick: function onClick($event) {
+          return $options.delete_task('sub_task', task._id, sub_task._id);
+        }
+      }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(sub_task.title), 9 /* TEXT, PROPS */, _hoisted_29)], 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_28);
+    }), 256 /* UNKEYED_FRAGMENT */))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_30, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+      onClick: function onClick($event) {
+        return $options.new_sub_task(task._id);
+      },
+      "class": "btn btn-outline-secondary my-font-IYL my-f-14-i px-4",
+      type: "button",
+      id: "button-addon1"
+    }, "ثبت", 8 /* PROPS */, _hoisted_31), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+      "onUpdate:modelValue": _cache[5] || (_cache[5] = function ($event) {
+        return _ctx.text_sub = $event;
+      }),
+      onKeyup: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withKeys)(function ($event) {
+        return $options.new_sub_task(task._id);
+      }, ["enter"]),
+      dir: "rtl",
+      type: "text",
+      "class": "form-control my-f-12-i border-1 border-secondary my-w-50 my-font-IYM",
+      placeholder: "اضافه کردن زیر تسک جدید",
+      "aria-label": "Example text with button addon",
+      "aria-describedby": "button-addon1"
+    }, null, 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_32), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, _ctx.text_sub]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+      "class": "btn btn-danger btn-sm float-end",
+      onClick: function onClick($event) {
+        return $options.delete_task('all_sub_task', task._id);
+      }
+    }, "حذف همه زیر تسک ها", 8 /* PROPS */, _hoisted_33)])], 8 /* PROPS */, _hoisted_27)], 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_23);
+  }), 256 /* UNKEYED_FRAGMENT */))])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_34, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.text_message), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_35, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.text_message), 1 /* TEXT */)], 64 /* STABLE_FRAGMENT */);
 }
 
 /***/ }),
